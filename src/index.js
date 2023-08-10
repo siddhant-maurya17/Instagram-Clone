@@ -8,10 +8,10 @@ import Provider from './context/Provider';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider>
-  <BrowserRouter>
-  
-        <App />
-  
-  </BrowserRouter>  
+    <BrowserRouter>
+    
+      <App />
+    
+    </BrowserRouter>  
   </Provider>
 );

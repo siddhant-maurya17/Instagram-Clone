@@ -2,12 +2,10 @@ import React,{useState,useContext} from "react";
 import axios from "axios";
 import Context from "../context/Context";
 
-const Signup=()=>{
+const Login=()=>{
     const [user, setUser] = useState({
-        name: "",
         email: "",
-        password: "",
-        confirm_password: ""
+        password: ""
     });
      
     
@@ -15,30 +13,24 @@ const Signup=()=>{
     let [success,setSuccess]=useState("");
     let [error,setError]=useState("");
     let {token,setToken}=useContext(Context);
-    
-    let {name,email,password,confirm_password}=user;
-    
-    
-    async function implementSignup(e){
+
+    let {email,password}=user;
+
+    async function implementLogin(e){
         e.preventDefault();
 
-        if(!name || !email || !password || !confirm_password){
+        if(!email || !password){
             setError("Please fill are the required fields");
             setSuccess("");
             return; 
         }
-        else if(password !== confirm_password){
-            setError("Passwords do not match")
-            setSuccess("")
-            return ;
-        }
 
         try{
-            const response = await axios.post("https://instagram-express-app.vercel.app/api/auth/signup",{name,email,password});
+            const response = await axios.post("https://instagram-express-app.vercel.app/api/auth/login",{email,password});
             setSuccess(response.data.message);
             setError("");
             setToken(response.data.data.token)
-            setUser({email:"" , password:""})
+            setUser({email:"" , password:""});
         }
             catch(error){
               setError(error.response.data.message);
@@ -50,13 +42,9 @@ const Signup=()=>{
     return ( <div className="signup">
                 {error && <h1>{error}</h1>}
                 {success && <h1>{success}</h1>}
-                {/* {token && <h1>{token}</h1>} */}
+                {token && <h1>{token}</h1>}
 
-           <form onSubmit={implementSignup}>
-                    <input type="text" placeholder="enter your name"
-                    value={user.name}
-                    onChange={(e) => setUser({...user, name:e.target.value})}
-                    />
+           <form onSubmit={implementLogin}>
                     <input type="email" placeholder="enter your email"
                     value={user.email}
                     onChange={(e) => setUser({...user, email:e.target.value})}
@@ -65,13 +53,9 @@ const Signup=()=>{
                     value={user.password}
                     onChange={(e) => setUser({...user, password:e.target.value})}
                     />
-                    <input type="password" placeholder="confirm your password"
-                    value={user.confirm_password}
-                    onChange={(e) => setUser({...user, confirm_password:e.target.value})}
-                    />
-                    <button type="submit">Signup</button>
+                    <button type="submit">Login</button>
                </form>
     </div>)
 }
 
-export default Signup;
+export default Login;
