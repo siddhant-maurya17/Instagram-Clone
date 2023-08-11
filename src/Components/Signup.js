@@ -1,7 +1,8 @@
 import React,{useState,useContext} from "react";
 import axios from "axios";
 import Context from "../context/Context";
-
+import { useNavigate } from "react-router-dom";
+import instaApi from "../utilities/instaApi";
 const Signup=()=>{
     const [user, setUser] = useState({
         name: "",
@@ -18,7 +19,7 @@ const Signup=()=>{
     
     let {name,email,password,confirm_password}=user;
     
-    
+    let navigate=useNavigate();
     async function implementSignup(e){
         e.preventDefault();
 
@@ -34,11 +35,14 @@ const Signup=()=>{
         }
 
         try{
-            const response = await axios.post("https://instagram-express-app.vercel.app/api/auth/signup",{name,email,password});
+           // const response = await axios.post("https://instagram-express-app.vercel.app/api/auth/signup",{name,email,password});
+            instaApi.post("/auth/signup",{name,email,password})
             setSuccess(response.data.message);
             setError("");
             setToken(response.data.data.token)
-            setUser({email:"" , password:""})
+            setUser({name:"" ,email:"" , password:"",confirm_password:""})
+            alert("Signup Successfull");
+            navigate("/home");  
         }
             catch(error){
               setError(error.response.data.message);

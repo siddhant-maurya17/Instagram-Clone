@@ -1,6 +1,7 @@
-import React,{useState,useContext} from "react";
+import React,{useState,useContext,useEffect} from "react";
 import axios from "axios";
 import Context from "../context/Context";
+import { useNavigate } from "react-router-dom";
 
 const Login=()=>{
     const [user, setUser] = useState({
@@ -15,7 +16,13 @@ const Login=()=>{
     let {token,setToken}=useContext(Context);
 
     let {email,password}=user;
-
+    
+    useEffect(()=>{
+        if(localStorage.getItem("token")){
+            navigate("/home")
+        }
+    },[])
+    let navigate=useNavigate();
     async function implementLogin(e){
         e.preventDefault();
 
@@ -30,7 +37,10 @@ const Login=()=>{
             setSuccess(response.data.message);
             setError("");
             setToken(response.data.data.token)
+            localStorage.setItem("token",response.data.data.token)
             setUser({email:"" , password:""});
+            alert("Login Successfull");
+            navigate("/home");
         }
             catch(error){
               setError(error.response.data.message);
